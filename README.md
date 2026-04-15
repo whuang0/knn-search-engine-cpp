@@ -1,4 +1,3 @@
-cat > README.md << 'EOF'
 # High-Performance k-NN Search Engine
 
 A cache-efficient k-d tree with parallel construction and query execution,
@@ -33,20 +32,25 @@ single queries from external processes.
 
 ## Build & Run
 
-\`\`\`bash
+```bash
 make
+```
 
-# Generate test data
+Generate test data:
+
+```bash
 python3 scripts/training_data.py 1000000 10 0
 python3 scripts/query_file.py 10000 10 0 5
+```
 
-# Run with N threads
+Run with N threads:
+
+```bash
 ./knn_search <threads> <training.dat> <query.dat> <results.bin>
-\`\`\`
+```
 
 ## Implementation Notes
 
 - Squared Euclidean distance avoids sqrt during search hot path
 - Worker process caches results by query ID to avoid redundant searches
 - Memory-mapped I/O for training and result files
-EOF
