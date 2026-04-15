@@ -78,7 +78,7 @@ void processPipeQuery(const KDTree& tree, const std::string& pipe_name) {
         
         // Read query point
         std::vector<float> coordinates(n_dimensions);
-        if (read(in_fd, coordinates.data(), n_dimensions * sizeof(float)) != n_dimensions * sizeof(float)) {
+        if (read(in_fd, coordinates.data(), n_dimensions * sizeof(float)) != (ssize_t)(n_dimensions * sizeof(float))) {
             std::cerr << "Error reading query coordinates" << std::endl;
             close(in_fd);
             return;
@@ -112,7 +112,7 @@ void processPipeQuery(const KDTree& tree, const std::string& pipe_name) {
         }
         
         for (const auto& neighbor : neighbors) {
-            if (write(out_fd, neighbor.coordinates.data(), n_dimensions * sizeof(float)) != n_dimensions * sizeof(float)) {
+            if (write(out_fd, neighbor.coordinates.data(), n_dimensions * sizeof(float)) != (ssize_t)(n_dimensions * sizeof(float))) {
                 std::cerr << "Error writing neighbor coordinates" << std::endl;
                 close(out_fd);
                 return;
@@ -228,7 +228,7 @@ int main(int argc, char* argv[]) {
             std::mutex cout_mutex;
             
             // Use larger chunks for better performance
-            size_t chunk_size = std::max(size_t(10000), query_points.size() / (n_cores * 2));
+            size_t chunk_size = std::max(size_t(1), query_points.size() / n_cores);
             size_t total_chunks = (query_points.size() + chunk_size - 1) / chunk_size;
             
             std::cout << "Processing " << total_chunks << " chunks of size " << chunk_size << std::endl;

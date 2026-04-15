@@ -272,7 +272,7 @@ void FileIO::writeResultFile(const std::string& filename,
 uint64_t FileIO::generateFileId() {
     uint64_t id;
     int fd = open("/dev/urandom", O_RDONLY);
-    read(fd, &id, sizeof(id));
+    (void)read(fd, &id, sizeof(id));
     close(fd);
     return id;
 }
